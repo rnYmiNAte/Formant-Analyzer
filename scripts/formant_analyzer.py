@@ -90,14 +90,9 @@ def extract_formants(
 
 def main():
     parser = argparse.ArgumentParser(description="Robust 5-formant extractor (skips bad files)")
-    parser.add_argument("--input-dir",   default="audio",      type=str,   help="folder with .wav files")
-    parser.add_argument("--output-dir",  default="results/formants", type=str)
-    parser.add_argument("--time-step",   default=0.010,        type=float, help="analysis interval (s)")
-    parser.add_argument("--max-formant", default=None,         type=float, help="override ALL files (Hz)")
-    parser.add_argument("--speaker",     default="auto",
-                        choices=["auto", "male", "female", "child"],
-                        help="global speaker type (when --max-formant not set)")
-    parser.add_argument("--mono", action="store_true", help="force mono (downmix stereo)")
+    parser.add_argument("--speaker-type", default="auto",
+                    choices=["auto", "male", "female", "child"],
+                    help="global speaker type (auto = filename detection)")
     args = parser.parse_args()
 
     input_path  = Path(args.input_dir).expanduser().resolve()
