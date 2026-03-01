@@ -1,47 +1,46 @@
-name: Formant Analyzer (5 Formants)
+name: Formant Analyzer (5 Formants) - Speaker Aware
 
 on:
-  # Run automatically when audio files change
   push:
     paths:
       - 'audio/**'
-  # Or trigger manually from the Actions tab
   workflow_dispatch:
     inputs:
       input_dir:
         description: 'Input audio directory'
         required: false
         default: 'audio'
-      max_formant:
-        description: 'Max formant frequency (Hz)'
+      speaker_type:
+        description: 'Speaker type: auto / male / female / child'
         required: false
-        default: '5500'
+        default: 'auto'
+      max_formant:
+        description: 'Global max formant override (Hz) - leave empty for auto'
+        required: false
+        default: ''
 
 jobs:
   analyze-formants:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up Python 3.12
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
 
       - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install praat-parselmouth pandas numpy
+        run: pip install praat-parselmouth pandas numpy
 
-      - name: Run 5-Formant Analyzer
+      - name: Run Speaker-Aware 5-Formant Analyzer
         run: |
           python scripts/formant_analyzer.py \
             --input-dir ${{ github.event.inputs.input_dir || 'audio' }} \
-            --max-formant ${{ github.event.inputs.max_formant || 5500 }}
+            --speaker-type ${{ github.event.inputs.speaker_type || 'auto' }} \
+            ${{ github.event.inputs.max_formant != '' && format('--max-formant {0}', github.event.inputs.max_formant) || '' }}
 
-      - name: Upload formant results
+      - name: Upload results
         uses: actions/upload-artifact@v4
         with:
           name: 5-formant-results
