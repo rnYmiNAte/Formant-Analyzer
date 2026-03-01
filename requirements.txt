@@ -1,3 +1,2 @@
 parselmouth
 pandas
-numpy
