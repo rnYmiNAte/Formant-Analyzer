@@ -1,0 +1,49 @@
+name: Formant Analyzer (5 Formants)
+
+on:
+  # Run automatically when audio files change
+  push:
+    paths:
+      - 'audio/**'
+  # Or trigger manually from the Actions tab
+  workflow_dispatch:
+    inputs:
+      input_dir:
+        description: 'Input audio directory'
+        required: false
+        default: 'audio'
+      max_formant:
+        description: 'Max formant frequency (Hz)'
+        required: false
+        default: '5500'
+
+jobs:
+  analyze-formants:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install praat-parselmouth pandas numpy
+
+      - name: Run 5-Formant Analyzer
+        run: |
+          python scripts/formant_analyzer.py \
+            --input-dir ${{ github.event.inputs.input_dir || 'audio' }} \
+            --max-formant ${{ github.event.inputs.max_formant || 5500 }}
+
+      - name: Upload formant results
+        uses: actions/upload-artifact@v4
+        with:
+          name: 5-formant-results
+          path: results/formants/
+          retention-days: 30
