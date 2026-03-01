@@ -1,48 +1,43 @@
-name: Formant Analyzer (5 Formants) - Speaker Aware
+name: Formant Analysis
 
 on:
   push:
-    paths:
-      - 'audio/**'
+    branches: [ main ]
+  pull_request:
   workflow_dispatch:
-    inputs:
-      input_dir:
-        description: 'Input audio directory'
-        required: false
-        default: 'audio'
-      speaker_type:
-        description: 'Speaker type: auto / male / female / child'
-        required: false
-        default: 'auto'
-      max_formant:
-        description: 'Global max formant override (Hz) - leave empty for auto'
-        required: false
-        default: ''
 
 jobs:
-  analyze-formants:
+  analyze:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+    - uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
 
-      - name: Install dependencies
-        run: pip install praat-parselmouth pandas numpy
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install numpy scipy pandas matplotlib praat-parselmouth soundfile
 
-      - name: Run Speaker-Aware 5-Formant Analyzer
-        run: |
-          python scripts/formant_analyzer.py \
-            --input-dir ${{ github.event.inputs.input_dir || 'audio' }} \
-            --speaker-type ${{ github.event.inputs.speaker_type || 'auto' }} \
-            ${{ github.event.inputs.max_formant != '' && format('--max-formant {0}', github.event.inputs.max_formant) || '' }}
+    - name: Run formant extraction
+      run: |
+        # Example: analyze all .wav files in repo or a folder
+        python -c "
+        import glob
+        from extract_5_formants import extract_formants   # assume you committed the script
+        for wav in glob.glob('audio/*.wav'):
+            df = extract_formants(wav, max_formants=5, max_formant_freq=5500)
+            csv = wav.replace('.wav', '_formants.csv')
+            df.to_csv(csv, index=False)
+            print(f'Processed {wav} → {csv}')
+        "
 
-      - name: Upload results
-        uses: actions/upload-artifact@v4
-        with:
-          name: 5-formant-results
-          path: results/formants/
-          retention-days: 30
+    - name: Upload results
+      uses: actions/upload-artifact@v4
+      with:
+        name: formant-csv-results
+        path: '**/*_formants.csv'
