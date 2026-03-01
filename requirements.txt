@@ -1,3 +1,4 @@
 parselmouth
 pandas
 numpy
+setuptools<58
