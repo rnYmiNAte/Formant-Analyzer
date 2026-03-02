@@ -1,0 +1,31 @@
+name: Analyze Audio Files
+
+on:
+  push:
+    branches: [ main ]
+    paths: [ 'data/*.wav' ]
+  pull_request:
+    paths: [ 'data/*.wav' ]
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run analyzer
+        run: |
+          for wav in data/*.wav; do
+            python main.py $wav
+            mv formant_plot.png data/results/$(basename $wav .wav)_plot.png
+          done
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: formant-plots
+          path: data/results/*.png
