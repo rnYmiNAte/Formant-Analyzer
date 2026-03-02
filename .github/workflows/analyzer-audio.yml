@@ -23,7 +23,8 @@ jobs:
           for wav in data/*.wav; do
             python main.py $wav
             mv formant_plot.png data/results/$(basename $wav .wav)_plot.png
-          done
+            pytest tests/
+            done
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
