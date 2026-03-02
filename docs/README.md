@@ -48,6 +48,7 @@ cd formant-analyzer
 pip install -e .
 ```
 # Or just install requirements
+```
 pip install -r requirements.txt
 
 ```
