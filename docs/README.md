@@ -39,7 +39,7 @@ f1_norm = (f1_hz - 200) / (1000 - 200) * 100   # clipped to 0–100
 f2_norm = (f2_hz - 800) / (3000 - 800) * 100   # clipped to 0–100
 
 # Clone the repo
-git clone https://github.com/yourusername/formant-analyzer.git
+git clone https://github.com/rnyminate/formant-analyzer.git
 cd formant-analyzer
 
 # Install dependencies (editable mode recommended for development)
