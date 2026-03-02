@@ -46,7 +46,7 @@ cd formant-analyzer
 # Install dependencies (editable mode recommended for development)
 ```
 pip install -e .
-
+```
 # Or just install requirements
 pip install -r requirements.txt
 
