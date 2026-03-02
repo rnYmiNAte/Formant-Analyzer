@@ -50,7 +50,7 @@ pip install -r requirements.txt
 
 
 # Analyze a single file
-formant-analyzer data/sample_vowel_a.wav
+python3 main.py data/sample_vowel_a.wav
 
 # Example output:
 # F1 = 78.45%
