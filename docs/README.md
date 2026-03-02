@@ -56,6 +56,7 @@ pip install -r requirements.txt
 python3 main.py data/sample_vowel_a.wav
 ```
 # Example output:
+```
 # F1 = 78.45%
 # F2 = 32.10%
 # → Plot saved as formant_plot.png (or in data/results/)
