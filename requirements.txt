@@ -1,2 +1,5 @@
-parselmouth
-pandas
+numpy>=1.24
+scipy>=1.10
+matplotlib>=3.7
+soundfile>=0.12  # For reliable WAV reading (if not using wave module)
+pytest>=7.0      # For testing
