@@ -34,24 +34,27 @@ Typical expected positions (approximate, varies by speaker/sex):
 - /a/ or /ɑ/ (as in "father"): F1 ~70–90%, F2 ~20–40% → lower-right
 
 Normalization formula (in code):
-```python
+```
 f1_norm = (f1_hz - 200) / (1000 - 200) * 100   # clipped to 0–100
 f2_norm = (f2_hz - 800) / (3000 - 800) * 100   # clipped to 0–100
-
+```
 # Clone the repo
+```
 git clone https://github.com/rnyminate/formant-analyzer.git
 cd formant-analyzer
-
+```
 # Install dependencies (editable mode recommended for development)
+```
 pip install -e .
 
 # Or just install requirements
 pip install -r requirements.txt
 
-
+```
 # Analyze a single file
+```
 python3 main.py data/sample_vowel_a.wav
-
+```
 # Example output:
 # F1 = 78.45%
 # F2 = 32.10%
